@@ -4,6 +4,7 @@ import { sound } from '@pixi/sound';
 import Button from './Button';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
+import { useTranslation } from '../../i18n';
 
 export default function MusicButton() {
   const musicUrl = useQuery(api.music.getBackgroundMusic);
@@ -38,15 +39,16 @@ export default function MusicButton() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [handleKeyPress]);
 
+  const { t } = useTranslation();
   return (
     <>
       <Button
         onClick={() => void flipSwitch()}
         className="hidden lg:block"
-        title="Play AI generated music (press m to play/mute)"
+        title={t('menu.music')}
         imgUrl={volumeImg}
       >
-        {isPlaying ? 'Mute' : 'Music'}
+        {isPlaying ? t('menu.mute') : t('menu.music')}
       </Button>
     </>
   );

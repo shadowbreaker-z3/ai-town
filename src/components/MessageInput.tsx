@@ -6,6 +6,7 @@ import { Id } from '../../convex/_generated/dataModel';
 import { useSendInput } from '../hooks/sendInput';
 import { Player } from '../../convex/aiTown/player';
 import { Conversation } from '../../convex/aiTown/conversation';
+import { useTranslation } from '../i18n';
 
 export function MessageInput({
   worldId,
@@ -19,8 +20,9 @@ export function MessageInput({
   conversation: Conversation;
 }) {
   const descriptions = useQuery(api.world.gameDescriptions, { worldId });
-  const humanName = descriptions?.playerDescriptions.find((p) => p.playerId === humanPlayer.id)
-    ?.name;
+  const humanName = descriptions?.playerDescriptions.find(
+    (p) => p.playerId === humanPlayer.id,
+  )?.name;
   const inputRef = useRef<HTMLParagraphElement>(null);
   const inflightUuid = useRef<string | undefined>();
   const writeMessage = useMutation(api.messages.writeMessage);
@@ -73,6 +75,8 @@ export function MessageInput({
       messageUuid,
     });
   };
+  const { t } = useTranslation();
+
   return (
     <div className="leading-tight mb-6">
       <div className="flex gap-4">
@@ -85,7 +89,7 @@ export function MessageInput({
           contentEditable
           style={{ outline: 'none' }}
           tabIndex={0}
-          placeholder="Type here"
+          placeholder={t('placeholder.typeHere')}
           onKeyDown={(e) => onKeyDown(e)}
         />
       </div>

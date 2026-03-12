@@ -4,6 +4,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { MessageInput } from './MessageInput';
 import { Player } from '../../convex/aiTown/player';
+import { useTranslation } from '../i18n';
 import { Conversation } from '../../convex/aiTown/conversation';
 import { useEffect, useRef } from 'react';
 
@@ -24,6 +25,7 @@ export function Messages({
   humanPlayer?: Player;
   scrollViewRef: React.RefObject<HTMLDivElement>;
 }) {
+  const { t } = useTranslation();
   const humanPlayerId = humanPlayer?.id;
   const descriptions = useQuery(api.world.gameDescriptions, { worldId });
   const messages = useQuery(api.messages.listMessages, {
@@ -89,8 +91,9 @@ export function Messages({
   const membershipNodes: typeof messageNodes = [];
   if (conversation.kind === 'active') {
     for (const [playerId, m] of conversation.doc.participants) {
-      const playerName = descriptions?.playerDescriptions.find((p) => p.playerId === playerId)
-        ?.name;
+      const playerName = descriptions?.playerDescriptions.find(
+        (p) => p.playerId === playerId,
+      )?.name;
       let started;
       if (m.status.kind === 'participating') {
         started = m.status.started;
@@ -99,7 +102,9 @@ export function Messages({
         membershipNodes.push({
           node: (
             <div key={`joined-${playerId}`} className="leading-tight mb-6">
-              <p className="text-brown-700 text-center">{playerName} joined the conversation.</p>
+              <p className="text-brown-700 text-center">
+                {t('joinedConversation', { name: playerName || '' })}
+              </p>
             </div>
           ),
           time: started,
@@ -108,13 +113,16 @@ export function Messages({
     }
   } else {
     for (const playerId of conversation.doc.participants) {
-      const playerName = descriptions?.playerDescriptions.find((p) => p.playerId === playerId)
-        ?.name;
+      const playerName = descriptions?.playerDescriptions.find(
+        (p) => p.playerId === playerId,
+      )?.name;
       const started = conversation.doc.created;
       membershipNodes.push({
         node: (
           <div key={`joined-${playerId}`} className="leading-tight mb-6">
-            <p className="text-brown-700 text-center">{playerName} joined the conversation.</p>
+            <p className="text-brown-700 text-center">
+              {t('joinedConversation', { name: playerName || '' })}
+            </p>
           </div>
         ),
         time: started,
@@ -123,7 +131,9 @@ export function Messages({
       membershipNodes.push({
         node: (
           <div key={`left-${playerId}`} className="leading-tight mb-6">
-            <p className="text-brown-700 text-center">{playerName} left the conversation.</p>
+            <p className="text-brown-700 text-center">
+              {t('leftConversation', { name: playerName || '' })}
+            </p>
           </div>
         ),
         // Always sort all "left" messages after the last message.

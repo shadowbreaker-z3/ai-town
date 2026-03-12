@@ -59,7 +59,7 @@ export async function startConversationMessage(
     messages: [
       {
         role: 'system',
-        content: prompt.join('\n') + '\nคำสั่งสำคัญ: คุณต้องตอบเป็นภาษาไทยเท่านั้น ห้ามตอบเป็นภาษาอื่นเด็ดขาด',
+        content: prompt.join('\n'),
       },
     ],
     max_tokens: 300,
@@ -112,7 +112,7 @@ export async function continueConversationMessage(
   const llmMessages: LLMMessage[] = [
     {
       role: 'system',
-      content: prompt.join('\n') + '\nคำสั่งสำคัญ: คุณต้องตอบเป็นภาษาไทยเท่านั้น ห้ามตอบเป็นภาษาอื่นเด็ดขาด',
+      content: prompt.join('\n'),
     },
     ...(await previousMessages(
       ctx,
@@ -161,7 +161,7 @@ export async function leaveConversationMessage(
   const llmMessages: LLMMessage[] = [
     {
       role: 'system',
-      content: prompt.join('\n') + '\nคำสั่งสำคัญ: คุณต้องตอบเป็นภาษาไทยเท่านั้น ห้ามตอบเป็นภาษาอื่นเด็ดขาด',
+      content: prompt.join('\n'),
     },
     ...(await previousMessages(
       ctx,
